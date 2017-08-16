@@ -1,15 +1,18 @@
 package com.example.campuscode06.contactapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.campuscode06.contactapp.adapters.ContactsAdapter;
+import com.example.campuscode06.contactapp.model.Contact;
+import com.example.campuscode06.contactapp.provider.ContactModel;
 
 import java.util.ArrayList;
 
@@ -17,28 +20,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ListView contacts;
     FloatingActionButton newContact;
-    ArrayList contactsList;
+    ArrayList<Contact> contactsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        contacts = (ListView) findViewById(R.id.lv_contacts);
-
-        contactsList = new ArrayList();
-
-        contactsList.add("Renan");
-        contactsList.add("Renata");
-        contactsList.add("Rafael");
-        contactsList.add("Rodrigo");
-
-        ContactsAdapter adapter = new ContactsAdapter(this, contactsList);
-
-        contacts.setAdapter(adapter);
-
         newContact = (FloatingActionButton) findViewById(R.id.fab_new_contact);
         newContact.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList();
     }
 
     @Override
@@ -47,11 +43,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(new Intent(this, NewContactActivity.class), 0);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void refreshList() {
+        contacts = (ListView) findViewById(R.id.lv_contacts);
+        contactsList = new ArrayList<Contact>();
 
-        Bundle result = data.getBundleExtra("data");
-        contactsList.add(result.getString("name"));
+        Cursor contactsCursor = getContentResolver().query(ContactModel.CONTENT_URI, null, null, null, null);
+        if (contactsCursor != null) {
+            while (contactsCursor.moveToNext()) {
+                contactsList.add(new Contact(
+                        contactsCursor.getString(contactsCursor.getColumnIndex(ContactModel.NAME)),
+                        contactsCursor.getString(contactsCursor.getColumnIndex(ContactModel.PHONE))
+                ));
+            }
+        }
+        contactsCursor.close();
+
+        ContactsAdapter adapter = new ContactsAdapter(this, contactsList);
+        contacts.setAdapter(adapter);
     }
+
+    public void deleteItem(View v) {
+        Toast.makeText(this, , Toast.LENGTH_SHORT).show();
+    }
+
 }

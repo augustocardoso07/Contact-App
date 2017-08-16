@@ -5,8 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.campuscode06.contactapp.R;
+import com.example.campuscode06.contactapp.model.Contact;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -17,9 +22,9 @@ import java.util.ArrayList;
 public class ContactsAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList mContactList;
+    private ArrayList<Contact> mContactList;
 
-    public ContactsAdapter(Context context, ArrayList contactsList) {
+    public ContactsAdapter(Context context, ArrayList<Contact> contactsList) {
         mContext = context;
         mContactList = contactsList;
     }
@@ -48,6 +53,11 @@ public class ContactsAdapter extends BaseAdapter {
             result = inflater.inflate(R.layout.contacts_item_layout, null);
         } else {
             result = view;
+            TextView name = (TextView) result.findViewById(R.id.tv_contact_item_name);
+            TextView phone = (TextView) result.findViewById(R.id.tv_contact_item_phone);
+
+            name.setText( mContactList.get(i).getName() );
+            phone.setText(mContactList.get(i).getPhone());
         }
         return result;
     }

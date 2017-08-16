@@ -17,6 +17,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewContactActivity"></activity>
+        <provider
+            android:authorities="br.com.campuscode.contacts.Contacts"
+            android:name=".provider.ContactsProvider"
+            android:exported="false"
+            android:label="Contacts"></provider>
+        
+        
+        
     </application>
 
 </manifest>
