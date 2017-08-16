@@ -5,11 +5,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.campuscode06.contactapp.adapters.ContactsAdapter;
+import com.example.campuscode06.contactapp.models.Contact;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ListView contacts;
     FloatingActionButton newContact;
-    ArrayList contactsList;
+    ArrayList<Contact> contactsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +25,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         contacts = (ListView) findViewById(R.id.lv_contacts);
 
-        contactsList = new ArrayList();
+        contactsList = new ArrayList<Contact>();
 
-        contactsList.add("Renan");
-        contactsList.add("Renata");
-        contactsList.add("Rafael");
-        contactsList.add("Rodrigo");
+        contactsList.add(new Contact("Renan", "1234567"));
+        contactsList.add(new Contact("Augusto", "1234567"));
+        contactsList.add(new Contact("Cardoso", "1234567"));
+        contactsList.add(new Contact("oi", "1234567"));
 
         ContactsAdapter adapter = new ContactsAdapter(this, contactsList);
 
@@ -52,6 +51,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
 
         Bundle result = data.getBundleExtra("data");
-        contactsList.add(result.getString("name"));
+        contactsList.add(new Contact(result.getString("name"), result.getString("phone")));
     }
 }
