@@ -7,10 +7,12 @@ package com.example.campuscode06.contactapp.model;
 public class Contact {
     private String mName;
     private String mPhone;
+    private String mId;
 
-    public Contact(String name, String phone) {
+    public Contact(String name, String phone, String Id) {
         mName = name;
         mPhone = phone;
+        mId = Id;
     }
 
     public String getName() {
@@ -27,6 +29,14 @@ public class Contact {
 
     public void setPhone(String mPhone) {
         this.mPhone = mPhone;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String Id) {
+        mId = Id;
     }
 
     @Override

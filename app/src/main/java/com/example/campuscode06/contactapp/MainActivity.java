@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             while (contactsCursor.moveToNext()) {
                 contactsList.add(new Contact(
                         contactsCursor.getString(contactsCursor.getColumnIndex(ContactModel.NAME)),
-                        contactsCursor.getString(contactsCursor.getColumnIndex(ContactModel.PHONE))
+                        contactsCursor.getString(contactsCursor.getColumnIndex(ContactModel.PHONE)),
+                        contactsCursor.getString(contactsCursor.getColumnIndex(ContactModel._ID))
                 ));
             }
         }
@@ -62,8 +63,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         contacts.setAdapter(adapter);
     }
 
-    public void deleteItem(View v) {
-        Toast.makeText(this, , Toast.LENGTH_SHORT).show();
-    }
 
 }
