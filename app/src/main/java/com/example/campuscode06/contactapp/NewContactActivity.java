@@ -1,9 +1,7 @@
 package com.example.campuscode06.contactapp;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +10,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.campuscode06.contactapp.provider.ContactModel;
+import com.example.campuscode06.contactapp.provider.WebAPI;
+
+import java.io.IOException;
 
 public class NewContactActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,12 +35,17 @@ public class NewContactActivity extends AppCompatActivity implements View.OnClic
 
         ContentValues contactValue = new ContentValues();
 
-        contactValue.put(ContactModel.NAME, name.getText().toString());
-        contactValue.put(ContactModel.PHONE, phone.getText().toString());
+        String contactName = name.getText().toString();
+        String contactPhone = phone.getText().toString();
+
+        contactValue.put(ContactModel.NAME, contactName);
+        contactValue.put(ContactModel.PHONE, contactPhone);
 
         Uri result =getContentResolver().insert(ContactModel.CONTENT_URI, contactValue);
         if (result != null) {
             Toast.makeText(this, "Contato Adicionado com id: " + result.getLastPathSegment(), Toast.LENGTH_SHORT).show();
+            WebAPI webAPI = new WebAPI(this, contactName, contactPhone);
+            webAPI.execute();
             finish();
         }
 
