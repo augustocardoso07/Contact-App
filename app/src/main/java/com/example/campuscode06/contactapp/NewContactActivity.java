@@ -5,14 +5,14 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.campuscode06.contactapp.provider.ContactModel;
-import com.example.campuscode06.contactapp.provider.WebAPI;
-
-import java.io.IOException;
+import com.example.campuscode06.contactapp.network.PostContactManager;
 
 public class NewContactActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,7 +36,27 @@ public class NewContactActivity extends AppCompatActivity implements View.OnClic
         ContentValues contactValue = new ContentValues();
 
         String contactName = name.getText().toString();
+
         String contactPhone = phone.getText().toString();
+
+        boolean err = false;
+
+
+
+        if (contactName.equals("")) {
+            Animation animation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+            name.setError("Nome nao pode ficar em branco");
+            err = true;
+        }
+
+        if (contactPhone.equals("")) {
+            phone.setError("Telefone nao pode ficar em branco");
+            err = true;
+        }
+
+        if (err) {
+            return;
+        }
 
         contactValue.put(ContactModel.NAME, contactName);
         contactValue.put(ContactModel.PHONE, contactPhone);
@@ -44,8 +64,8 @@ public class NewContactActivity extends AppCompatActivity implements View.OnClic
         Uri result =getContentResolver().insert(ContactModel.CONTENT_URI, contactValue);
         if (result != null) {
             Toast.makeText(this, "Contato Adicionado com id: " + result.getLastPathSegment(), Toast.LENGTH_SHORT).show();
-            WebAPI webAPI = new WebAPI(this, contactName, contactPhone);
-            webAPI.execute();
+            PostContactManager postContactManager = new PostContactManager(this, contactName, contactPhone);
+            postContactManager.execute();
             finish();
         }
 

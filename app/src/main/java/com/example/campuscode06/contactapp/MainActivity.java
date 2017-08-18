@@ -6,21 +6,24 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.campuscode06.contactapp.adapters.ContactsAdapter;
 import com.example.campuscode06.contactapp.model.Contact;
+import com.example.campuscode06.contactapp.network.GetContactManager;
+import com.example.campuscode06.contactapp.network.PostContactManager;
 import com.example.campuscode06.contactapp.provider.ContactModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GetContactManager.OnSyncListerner {
 
     ListView contacts;
     FloatingActionButton newContact;
-    ArrayList<Contact> contactsList;
+    List<Contact> contactsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        refreshList();
+
+        GetContactManager web = new GetContactManager(this);
+        web.execute();
     }
 
     @Override
@@ -43,11 +48,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(new Intent(this, NewContactActivity.class), 0);
     }
 
-    private void refreshList() {
+
+    @Override
+    public void onSyncFinish(String contactsJson) {
+
         contacts = (ListView) findViewById(R.id.lv_contacts);
         contactsList = new ArrayList<Contact>();
 
-        Cursor contactsCursor = getContentResolver().query(ContactModel.CONTENT_URI, null, null, null, null);
+        /*Cursor contactsCursor = getContentResolver().query(ContactModel.CONTENT_URI, null, null, null, null);
         if (contactsCursor != null) {
             while (contactsCursor.moveToNext()) {
                 contactsList.add(new Contact(
@@ -58,10 +66,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         contactsCursor.close();
+        */
+
+        Gson gson = new Gson();
+        contactsList = Arrays.asList(gson.fromJson(contactsJson, Contact[].class));
 
         ContactsAdapter adapter = new ContactsAdapter(this, contactsList);
         contacts.setAdapter(adapter);
     }
-
-
 }

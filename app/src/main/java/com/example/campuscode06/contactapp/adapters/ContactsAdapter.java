@@ -19,14 +19,15 @@ import com.example.campuscode06.contactapp.provider.ContactModel;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ContactsAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<Contact> mContactList;
+    private List<Contact> mContactList;
 
-    public ContactsAdapter(Context context, ArrayList<Contact> contactsList) {
+    public ContactsAdapter(Context context, List<Contact> contactsList) {
         mContext = context;
         mContactList = contactsList;
     }

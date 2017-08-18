@@ -1,4 +1,4 @@
-package com.example.campuscode06.contactapp.provider;
+package com.example.campuscode06.contactapp.network;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,15 +19,13 @@ import java.net.URL;
  * Created by campuscode06 on 8/16/17.
  */
 
-public class WebAPI extends AsyncTask<Void, Integer, Integer> {
-
-    public static final String CONTACTS_URL = "https://contatostreinamento.herokuapp.com/contacts";
+public class PostContactManager extends AsyncTask<Void, Integer, Integer> {
 
     String mName;
     String mPhone;
     Context mContext;
 
-    public WebAPI(Context context, String name, String phone) {
+    public PostContactManager(Context context, String name, String phone) {
         mName = name;
         mPhone = phone;
         mContext = context;
@@ -37,7 +35,7 @@ public class WebAPI extends AsyncTask<Void, Integer, Integer> {
         OutputStreamWriter writer = null;
         String contentAsString = "";
         try {
-            URL url = new URL(CONTACTS_URL);
+            URL url = new URL(ContactManager.CONTACTS_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* miliseconds */);
             conn.setConnectTimeout(15000 /* miliseconds */);
@@ -85,6 +83,7 @@ public class WebAPI extends AsyncTask<Void, Integer, Integer> {
 
     @Override
     protected Integer doInBackground(Void[] objects) {
+
         int result = -1;
         try {
             postContact(mName, mPhone);
@@ -93,7 +92,6 @@ public class WebAPI extends AsyncTask<Void, Integer, Integer> {
             Log.e("IOException",e.getMessage());
         }
         return result;
-
 
     }
 

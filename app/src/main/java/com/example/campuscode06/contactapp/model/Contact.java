@@ -1,12 +1,18 @@
 package com.example.campuscode06.contactapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by RenanCardoso on 16/08/2017.
  */
 
 public class Contact {
+
+    @SerializedName("name")
     private String mName;
+    @SerializedName("phone")
     private String mPhone;
+    @SerializedName("id")
     private String mId;
 
     public Contact(String name, String phone, String Id) {
