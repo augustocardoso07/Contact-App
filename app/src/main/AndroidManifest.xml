@@ -24,7 +24,9 @@
             android:exported="false"
             android:label="Contacts"></provider>
 
+        <service android:name=".services.ContactsServices">
 
+        </service>
     </application>
 
 </manifest>
